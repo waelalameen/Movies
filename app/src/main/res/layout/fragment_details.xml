@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="tech.wa.moviessample.presenation.MoviesViewModel" />
+        <variable
+            name="viewModel"
+            type="MoviesViewModel" />
+    </data>
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/back_button_card_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:cardBackgroundColor="@color/salmon"
+                app:cardCornerRadius="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/movie_poster_card_view"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_back"
+                        app:tint="@color/white"
+                        android:contentDescription="@string/back_icon" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/title_text_view"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/movie_details"
+                app:layout_constraintBottom_toBottomOf="@+id/back_button_card_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toEndOf="@+id/back_button_card_view"
+                app:layout_constraintTop_toTopOf="@+id/back_button_card_view" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/movie_poster_card_view"
+                android:layout_width="0dp"
+                android:layout_height="260dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/chipGroup"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/back_button_card_view">
+
+                <ImageView
+                    android:id="@+id/poster_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@tools:sample/avatars"
+                    app:url="@{viewModel.detailsState.data.poster}"
+                    android:contentDescription="@string/poster_image" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:id="@+id/movie_title_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@{viewModel.detailsState.data.title}"
+                tools:text="Avengers: End Game"
+                app:layout_constraintBottom_toTopOf="@+id/movie_desc_text_view"
+                app:layout_constraintEnd_toStartOf="@+id/chipGroup"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="@+id/movie_poster_card_view"
+                app:layout_constraintTop_toBottomOf="@+id/movie_poster_card_view" />
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:id="@+id/movie_desc_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@{viewModel.detailsState.data.plot}"
+                tools:text="@string/lorem_ipsum"
+                app:layout_constraintEnd_toEndOf="@+id/chipGroup"
+                app:layout_constraintStart_toStartOf="@+id/movie_title_text_view"
+                app:layout_constraintTop_toBottomOf="@+id/movie_title_text_view" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/movie_title_text_view"
+                app:layout_constraintEnd_toEndOf="@+id/movie_poster_card_view"
+                app:layout_constraintStart_toEndOf="@+id/movie_title_text_view"
+                app:layout_constraintTop_toTopOf="@+id/movie_title_text_view">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/movie_year_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.detailsState.data.type}"
+                    tools:text="2020" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/movie_rating_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.detailsState.data.rating}"
+                    app:chipIcon="@drawable/ic_star"
+                    app:chipIconSize="16dp"
+                    app:chipIconTint="@color/orange"
+                    app:chipStartPadding="8dp"
+                    tools:text="8.4" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Movies Sample</string>
+    <string name="lorem_ipsum">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</string>
+    <string name="service_connection_failure">Check your connection</string>
+    <string name="emptyMessage">No movies or shows found</string>
+    <string name="searchHintMessage">Search for movies or shows</string>
+    <string name="poster_image">poster image</string>
+    <string name="add_to_favorites">add to favorites</string>
+    <string name="hide_movie_or_show">hide movie or show</string>
+    <string name="loading_error_image">loading error image</string>
+    <string name="tap_to_retry">Tap to Retry</string>
+    <string name="search_movie_or_show">Search Movie or Show</string>
+    <string name="search">Search</string>
+    <string name="back_icon">back icon</string>
+    <string name="movie_details">Movie Details</string>
+    <string name="favorites_icon">favorites icon</string>
+    <string name="favorites">Favorites</string>
+    <string name="back_button">back_button</string>
+    <string name="empty_icon">Empty Icon</string>
+</resources>

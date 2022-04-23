@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="tech.wa.moviessample.data.Resource" />
+        <import type="tech.wa.moviessample.presenation.MoviesViewModel" />
+        <import type="android.view.View" />
+
+        <variable
+            name="viewStatus"
+            type="Resource" />
+
+        <variable
+            name="viewModel"
+            type="MoviesViewModel" />
+
+        <variable
+            name="isEmpty"
+            type="boolean" />
+
+        <variable
+            name="emptyMessage"
+            type="String" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_transparent"
+            android:visibility="@{(viewStatus.state == Resource.State.ERROR) ? View.VISIBLE : View.GONE, default=gone}">
+
+            <ImageView
+                android:id="@+id/image_error"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/loading_error_image"
+                android:focusable="true"
+                android:onClick="@{(v) -> viewModel.retry()}"
+                android:src="@drawable/ic_baseline_wifi_tethering_error_rounded_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/service_connection_failure"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_error" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_transparent"
+            android:visibility="@{(viewStatus.state == Resource.State.SUCCESS &amp;&amp; isEmpty) ? View.VISIBLE : View.GONE, default=gone}">
+
+            <ImageView
+                android:id="@+id/image_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/empty_icon" />
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{emptyMessage}"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_empty" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/constraint_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_transparent"
+            android:visibility="@{(viewStatus.state == Resource.State.LOADING) ? View.VISIBLE : View.GONE, default=visible}">
+
+            <ProgressBar
+                style="@style/LoadingProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foregroundGravity="center" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+</layout>
