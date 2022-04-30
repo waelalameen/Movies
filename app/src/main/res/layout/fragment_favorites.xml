@@ -4,7 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="tech.wa.moviessample.data.UiState" />
+        <import type="android.view.View" />
+        <import type="tech.wa.moviessample.presentation.MoviesViewModel" />
 
+        <variable
+            name="viewModel"
+            type="MoviesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +26,6 @@
             android:visibility="invisible"
             app:cardBackgroundColor="@color/salmon"
             app:cardCornerRadius="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/recycler_view"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +52,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/title_text_view"
+            android:id="@+id/favorites_title_text_view"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,12 +63,13 @@
             app:layout_constraintTop_toTopOf="@+id/back_button_card_view" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/favorites_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:visibility="@{viewModel.favoritesState.state == UiState.State.SUCCESS ? View.VISIBLE : View.GONE, default=gone}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,5 +77,20 @@
             app:layout_constraintTop_toBottomOf="@+id/back_button_card_view"
             app:spanCount="2"
             tools:listitem="@layout/item_favorite" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/state_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:emptyMessage="@{@string/searchHintMessage}"
+            app:isEmpty="@{viewModel.favoritesState.data.empty}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:viewModel="@{viewModel}"
+            app:viewStatus="@{viewModel.favoritesState}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

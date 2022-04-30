@@ -5,9 +5,15 @@
 
     <data>
         <import type="tech.wa.moviessample.domain.Details" />
+        <import type="tech.wa.moviessample.ui.favorites.FavoriteItemInteractionListener" />
+
         <variable
             name="item"
             type="Details" />
+
+        <variable
+            name="itemInteractionListener"
+            type="FavoriteItemInteractionListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +28,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/title_text_view"
+            app:layout_constraintBottom_toTopOf="@+id/favorites_title_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,6 +57,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:contentDescription="@string/favorites_icon"
+                    android:onClick="@{(v) -> itemInteractionListener.removeFromFavorites(item)}"
                     app:tint="@color/salmon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/poster_image_view"
@@ -60,7 +67,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/title_text_view"
+            android:id="@+id/favorites_title_text_view"
             style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -85,10 +92,10 @@
             android:text="@{item.type + ` &#x2022; ` + item.year}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/title_text_view"
+            app:layout_constraintEnd_toEndOf="@+id/favorites_title_text_view"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/title_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/title_text_view"
+            app:layout_constraintStart_toStartOf="@+id/favorites_title_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/favorites_title_text_view"
             tools:text="Movie &#x2022; 2018" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,8 @@ fun BottomNavigationView.setupWithNavController(
 ): LiveData<NavController> {
 
     // Map of tags
-    val graphIdToTagMap = arrayListOf<String>()
+    val graphIdToTagMap: MutableMap<Int, String> = mutableMapOf()
+
     // Result. Mutable live data with the selected controlled
     val selectedNavController = MutableLiveData<NavController>()
 
@@ -61,7 +62,7 @@ fun BottomNavigationView.setupWithNavController(
 
     // Now connect selecting an item with swapping Fragments
     var selectedItemTag = graphIdToTagMap[this.selectedItemId]
-    val firstFragmentTag = graphIdToTagMap[firstFragmentGraphId]
+    val firstFragmentTag = graphIdToTagMap[firstFragmentGraphId] ?: ""
     var isOnFirstFragment = selectedItemTag == firstFragmentTag
 
     // When a navigation item is selected
@@ -94,8 +95,9 @@ fun BottomNavigationView.setupWithNavController(
                         .setPrimaryNavigationFragment(selectedFragment)
                         .apply {
                             // Detach all other Fragments
-                            graphIdToTagMap.forEach { fragmentTagIter ->
-                                if (fragmentTagIter != newlySelectedItemTag) {
+                            val iterator = graphIdToTagMap.entries.iterator()
+                            iterator.forEachRemaining {
+                                if (it.value != newlySelectedItemTag) {
                                     detach(fragmentManager.findFragmentByTag(firstFragmentTag)!!)
                                 }
                             }
@@ -162,7 +164,7 @@ private fun BottomNavigationView.setupDeepLinks(
 }
 
 private fun BottomNavigationView.setupItemReselected(
-    graphIdToTagMap: List<String> = arrayListOf(),
+    graphIdToTagMap: MutableMap<Int, String> = mutableMapOf(),
     fragmentManager: FragmentManager
 ) {
     setOnItemReselectedListener { item ->

@@ -5,18 +5,20 @@
 
     <data>
         <import type="tech.wa.moviessample.domain.Search" />
-        <import type="tech.wa.moviessample.presenation.ItemInteractionListener" />
+        <import type="tech.wa.moviessample.ui.home.MoviesSearchItemInteractionListener" />
+
         <variable
             name="item"
             type="Search" />
         <variable
             name="itemInteractionListener"
-            type="ItemInteractionListener" />
+            type="MoviesSearchItemInteractionListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{(v) -> itemInteractionListener.onItemClick(item)}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/poster_card"
@@ -25,10 +27,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{(v) -> itemInteractionListener.onItemClick(item)}"
             app:cardCornerRadius="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/title_text_view"
+            app:layout_constraintEnd_toStartOf="@+id/favorites_title_text_view"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -45,7 +46,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/title_text_view"
+            android:id="@+id/favorites_title_text_view"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -68,13 +69,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Action, Adventure, Drama"
+            android:text="@string/action_adventure_drama"
             android:maxLines="2"
             android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@id/chip_group"
             app:layout_constraintEnd_toEndOf="@+id/hide_icon_image_view"
-            app:layout_constraintStart_toStartOf="@+id/title_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/title_text_view"
+            app:layout_constraintStart_toStartOf="@+id/favorites_title_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/favorites_title_text_view"
             tools:text="Action, Adventure, Drama" />
 
         <com.google.android.material.chip.ChipGroup
@@ -101,16 +102,19 @@
 
         </com.google.android.material.chip.ChipGroup>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatToggleButton
             android:id="@+id/favorite_icon_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="8dp"
+            android:onClick="@{(v) -> itemInteractionListener.addToFavorite(item)}"
             app:layout_constraintBottom_toBottomOf="@+id/hide_icon_image_view"
             app:layout_constraintEnd_toStartOf="@+id/hide_icon_image_view"
-            app:layout_constraintStart_toEndOf="@+id/title_text_view"
+            app:layout_constraintStart_toEndOf="@+id/favorites_title_text_view"
             app:layout_constraintTop_toTopOf="@+id/hide_icon_image_view"
-            app:srcCompat="@drawable/ic_favorite"
+            android:textOn=""
+            android:textOff=""
+            android:background="@drawable/favorite_toggle_icon"
             app:tint="@color/grey_100"
             android:contentDescription="@string/add_to_favorites" />
 
@@ -119,9 +123,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:onClick="@{(v) -> itemInteractionListener.hideFromFeed(item)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/favorite_icon_image_view"
-            app:layout_constraintTop_toTopOf="@+id/title_text_view"
+            app:layout_constraintTop_toTopOf="@+id/favorites_title_text_view"
             app:srcCompat="@drawable/ic_close"
             android:contentDescription="@string/hide_movie_or_show" />
 

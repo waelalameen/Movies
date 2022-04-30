@@ -1,6 +1,6 @@
 package tech.wa.moviessample.domain
 
-import tech.wa.moviessample.data.cache.entities.FavoritesDto
+import tech.wa.moviessample.data.cache.entities.FavoritesEntity
 
 data class Favorites(
     val id: String = "",
@@ -9,8 +9,8 @@ data class Favorites(
     val year: String = "",
     val poster: String = ""
 ) {
-    fun toFavoriteDto(): FavoritesDto {
-        return FavoritesDto(
+    fun toFavoriteDto(): FavoritesEntity {
+        return FavoritesEntity(
             id = id,
             title = title,
             type = type,

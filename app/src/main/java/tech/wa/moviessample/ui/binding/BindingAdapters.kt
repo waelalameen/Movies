@@ -7,12 +7,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import tech.wa.moviessample.R
 
 @BindingAdapter("app:url")
-fun provideImageUrlLoader(imageView: ImageView, url: String) {
-    Glide.with(imageView)
-        .load(url)
-        .centerCrop()
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
-        .error(R.drawable.ic_loading_error)
-        .placeholder(R.drawable.ic_retry)
-        .into(imageView)
+fun provideImageUrlLoader(imageView: ImageView, url: String?) {
+    url?.let {
+        Glide.with(imageView)
+            .load(it)
+            .centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .error(R.drawable.ic_loading_error)
+            .placeholder(R.drawable.ic_retry)
+            .into(imageView)
+    }
 }

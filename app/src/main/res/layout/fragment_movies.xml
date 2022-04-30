@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="tech.wa.moviessample.data.Resource" />
-        <import type="tech.wa.moviessample.presenation.MoviesViewModel" />
+        <import type="tech.wa.moviessample.data.UiState" />
+        <import type="android.view.View" />
+        <import type="tech.wa.moviessample.presentation.MoviesViewModel" />
+
         <variable
             name="viewModel"
             type="MoviesViewModel" />
@@ -39,14 +41,14 @@
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/back_icon"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_arrow_back"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/back_icon" />
+                    app:tint="@color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,6 +73,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            app:hintAnimationEnabled="false"
+            app:hintEnabled="false"
             app:boxStrokeWidth="4dp"
             app:endIconDrawable="@drawable/ic_close"
             app:endIconMode="clear_text"
@@ -86,29 +90,39 @@
                 android:drawableStart="@drawable/ic_search"
                 android:drawablePadding="4dp"
                 android:drawableTint="@color/black"
+                android:inputType="textNoSuggestions"
                 android:hint="@string/search"
+                android:maxLines="1"
+                android:imeActionId="1"
+                android:imeOptions="actionSearch"
                 android:textStyle="bold" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/search_results_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="@{viewModel.searchResultsStatus.state == UiState.State.SUCCESS ? View.VISIBLE : View.GONE, default=gone}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_input_layout"
-            android:visibility="gone"
             tools:listitem="@layout/item_movie" />
 
         <include
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/include2"
             layout="@layout/state_layout"
-            app:viewModel="@{viewModel}"
-            app:viewStatus="@{viewModel.searchStatus}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:emptyMessage="@{@string/searchHintMessage}"
             app:isEmpty="@{true}"
-            app:emptyMessage="@{@string/searchHintMessage}"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:viewModel="@{viewModel}"
+            app:viewStatus="@{viewModel.searchResultsStatus}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

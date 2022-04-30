@@ -2,10 +2,9 @@ package tech.wa.moviessample.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import dagger.hilt.android.AndroidEntryPoint
 import tech.wa.moviessample.R
 import tech.wa.moviessample.databinding.ActivityMainBinding
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setupNavigationController()
     }
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             R.navigation.favorites_navigation
         )
 
-        currentNavigationController = binding.bottomNav.setupWithNavController(
+        currentNavigationController = binding.bottomNavigationView.setupWithNavController(
             navGraphList.toList(), supportFragmentManager, R.id.fragment_container_view, intent
         )
     }
@@ -39,5 +38,12 @@ class MainActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         setupNavigationController()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        currentNavigationController?.let {
+            return it.value?.navigateUp() ?: super.onSupportNavigateUp()
+        }
+        return super.onSupportNavigateUp()
     }
 }

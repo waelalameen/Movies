@@ -9,6 +9,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StyleRes
 import androidx.core.util.Preconditions
+import androidx.navigation.NavGraph
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import tech.wa.moviessample.R
@@ -34,6 +37,7 @@ fun Fragment.pop() {
 @SuppressLint("RestrictedApi")
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
+    navGraphId: Int? = null,
     @StyleRes themeResId: Int = R.style.Theme_MoviesSample,
     crossinline action: Fragment.() -> Unit = {}
 ) {
@@ -57,6 +61,20 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
             .beginTransaction()
             .add(android.R.id.content, fragment, "")
             .commitNow()
+
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+
+        navGraphId?.let {
+            val inflater = navController.navInflater
+            val graph = inflater.inflate(it)
+            navController.graph = graph
+        }
+
+        fragment.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
+            if (viewLifecycleOwner != null) {
+                Navigation.setViewNavController(fragment.requireView(), navController)
+            }
+        }
 
         fragment.action()
     }

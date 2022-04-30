@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="tech.wa.moviessample.data.Resource" />
-        <import type="tech.wa.moviessample.presenation.MoviesViewModel" />
+        <import type="tech.wa.moviessample.data.UiState" />
+        <import type="tech.wa.moviessample.presentation.MoviesViewModel" />
         <import type="android.view.View" />
 
         <variable
             name="viewStatus"
-            type="Resource" />
+            type="UiState" />
 
         <variable
             name="viewModel"
@@ -30,11 +30,11 @@
         android:background="@color/color_transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_error"
+            android:id="@+id/layout_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/color_transparent"
-            android:visibility="@{(viewStatus.state == Resource.State.ERROR) ? View.VISIBLE : View.GONE, default=gone}">
+            android:visibility="@{(viewStatus.state == UiState.State.ERROR) ? View.VISIBLE : View.GONE, default=gone}">
 
             <ImageView
                 android:id="@+id/image_error"
@@ -65,11 +65,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_empty"
+            android:id="@+id/layout_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/color_transparent"
-            android:visibility="@{(viewStatus.state == Resource.State.SUCCESS &amp;&amp; isEmpty) ? View.VISIBLE : View.GONE, default=gone}">
+            android:visibility="@{(viewStatus.state == UiState.State.IDLE) ? View.VISIBLE : View.GONE, default=gone}">
 
             <ImageView
                 android:id="@+id/image_empty"
@@ -96,11 +96,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:id="@+id/constraint_loading"
+            android:id="@+id/layout_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/color_transparent"
-            android:visibility="@{(viewStatus.state == Resource.State.LOADING) ? View.VISIBLE : View.GONE, default=visible}">
+            android:visibility="@{viewStatus.state == UiState.State.LOADING ? View.VISIBLE : View.GONE, default=visible}">
 
             <ProgressBar
                 style="@style/LoadingProgressBar"

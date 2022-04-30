@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import tech.wa.moviessample.databinding.FragmentDetailsBinding
 import tech.wa.moviessample.extensions.pop
-import tech.wa.moviessample.presenation.MoviesViewModel
+import tech.wa.moviessample.presentation.MoviesViewModel
 
 @AndroidEntryPoint
 class MovieDetailsFragment: Fragment() {
@@ -34,12 +37,19 @@ class MovieDetailsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.setVariable(BR.viewModel, viewModel)
-        binding.executePendingBindings()
-
         arguments.id?.let {
             viewModel.getDetails(it)
         }
+
+        binding.also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.setVariable(BR.viewModel, viewModel)
+            it.executePendingBindings()
+        }
+
+        viewModel.detailsState.onEach {
+            println("details => $it")
+        }.launchIn(lifecycleScope)
 
         binding.backButtonCardView.setOnClickListener { pop() }
     }

@@ -4,7 +4,7 @@ import androidx.annotation.WorkerThread
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import tech.wa.moviessample.data.Resource
+import tech.wa.moviessample.data.UiState
 import tech.wa.moviessample.data.remote.MoviesApi
 import tech.wa.moviessample.domain.Details
 import javax.inject.Inject
@@ -15,8 +15,8 @@ class DetailsRepositoryImpl @Inject constructor(
 ) : DetailsRepository {
 
     @WorkerThread
-    override suspend fun getDetails(id: String): Flow<Resource<Details>> = flow {
-        emit(Resource.Loading(isLoading = true))
+    override suspend fun getDetails(id: String): Flow<UiState<Details>> = flow {
+        emit(UiState.Loading(isLoading = true))
         try {
             val response = api.details(id)
 
@@ -25,15 +25,15 @@ class DetailsRepositoryImpl @Inject constructor(
                     if (it.responseStatus == "False") {
                         throw Exception(it.errorMessage)
                     }
-                    emit(Resource.Success(data = it.toDetails()))
+                    emit(UiState.Success(data = it.toDetails()))
                 }
             } else {
                 val stream = response.errorBody()?.charStream()
                 val error = stream?.readText()
-                emit(Resource.Error(errorMessage = error))
+                emit(UiState.Error(errorMessage = error))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(errorMessage = e.message))
+            emit(UiState.Error(errorMessage = e.message))
         }
     }
 }

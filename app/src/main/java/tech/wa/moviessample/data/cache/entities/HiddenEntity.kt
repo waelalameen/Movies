@@ -2,10 +2,10 @@ package tech.wa.moviessample.data.cache.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import tech.wa.moviessample.domain.Favorites
+import tech.wa.moviessample.domain.Search
 
-@Entity(tableName = "favorites")
-data class FavoritesDto(
+@Entity(tableName = "hidden")
+data class HiddenEntity(
     @PrimaryKey
     val id: String,
     val title: String,
@@ -13,8 +13,8 @@ data class FavoritesDto(
     val year: String,
     val poster: String
 ) {
-    fun toFavorite(): Favorites {
-        return Favorites(
+    fun toSearchResult(): Search {
+        return Search(
             id = id,
             title = title,
             type = type,

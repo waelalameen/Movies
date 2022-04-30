@@ -19,7 +19,7 @@ import org.junit.runners.MethodSorters
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import tech.wa.moviessample.R
-import tech.wa.moviessample.TestConstants.MAIN_TITLE
+import tech.wa.moviessample.TestConstants.SEARCH_MAIN_TITLE
 import tech.wa.moviessample.TestConstants.MOVIE_IN_THE_MIDDLE_POSITION
 import tech.wa.moviessample.TestConstants.MOVIE_IN_THE_MIDDLE_TITLE
 import tech.wa.moviessample.TestConstants.MOVIE_TITLE
@@ -43,27 +43,25 @@ class MoviesFragmentTest {
 
     @Before
     fun setup() {
-        launchFragmentInHiltContainer<MoviesFragment>()
+        launchFragmentInHiltContainer<MoviesFragment>(navGraphId = R.navigation.search_navigation)
     }
 
     // Make sure if fragment is rendered and check fragment title.
     @Test
     fun `A - test movies fragment title - success`() {
         onView(withId(R.id.movies_title_text_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.movies_title_text_view)).check(matches(withText(MAIN_TITLE)))
-    }
-
-    // Check that recyclerview comes into view.
-    @Test
-    fun `B - test if recycler view is rendered - success`() {
-        onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
+        onView(withId(R.id.movies_title_text_view)).check(matches(withText(SEARCH_MAIN_TITLE)))
     }
 
     // Scroll recycler view to an item and check if that item is rendered.
     @Test
-    fun `C - test scroll to a specified item in the list - success`(): Unit = runBlocking {
+    fun `B - test scroll to a specified item in the list - success`(): Unit = runBlocking {
         // Check if the search bar is visible.
         onView(withId(R.id.search_input_layout)).check(matches(isDisplayed()))
+
+        // Check that the UI is in idle state.
+        onView(withId(R.id.layout_loading)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+         onView(withId(R.id.search_results_recycler_view)).check(matches(withEffectiveVisibility(Visibility.GONE)))
 
         // Type the movie title to search.
         onView(withId(R.id.search_input)).perform(
@@ -72,10 +70,14 @@ class MoviesFragmentTest {
         )
 
         // Simulate some delay
-        delay(1000)
+        delay(2000)
+
+        // Check that the UI is no longer in loading state.
+        onView(withId(R.id.layout_loading)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.search_results_recycler_view)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         // Scroll to the item with the given title.
-        onView(withId(R.id.recycler_view)).perform(
+        onView(withId(R.id.search_results_recycler_view)).perform(
             RecyclerViewActions.scrollTo<MoviesAdapter.MoviesViewHolder>(
                 hasDescendant(withText(MOVIE_TITLE))
             )
@@ -84,7 +86,7 @@ class MoviesFragmentTest {
 
     // Make sure that the item in the middle of list is clicked.
     @Test
-    fun `D - test item click on an item in the middle`(): Unit = runBlocking {
+    fun `C - test item click on an item in the middle`(): Unit = runBlocking {
         // Check if the search bar is visible.
         onView(withId(R.id.search_input_layout)).check(matches(isDisplayed()))
 
@@ -98,7 +100,7 @@ class MoviesFragmentTest {
         delay(1000)
 
         // Click the item with given position.
-        onView(withId(R.id.recycler_view)).perform(
+        onView(withId(R.id.search_results_recycler_view)).perform(
             RecyclerViewActions.actionOnItemAtPosition<MoviesAdapter.MoviesViewHolder>(
                 MOVIE_IN_THE_MIDDLE_POSITION,
                 click()

@@ -6,4 +6,24 @@ data class Search(
     val id: String = "",
     val type: String = "",
     val poster: String = ""
-)
+) {
+    fun toFavorite(): Favorites {
+        return Favorites(
+            id = id,
+            title = title,
+            type = type,
+            year = year,
+            poster = poster
+        )
+    }
+
+    fun toHidden(): Hidden {
+        return Hidden(
+            id = id,
+            title = title,
+            type = type,
+            year = year,
+            poster = poster
+        )
+    }
+}

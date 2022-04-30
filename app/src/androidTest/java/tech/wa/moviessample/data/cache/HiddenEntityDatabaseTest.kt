@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 @UninstallModules(CacheModule::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @HiltAndroidTest
-class HiddenDatabaseTest {
+class HiddenEntityDatabaseTest {
 
     @get:Rule
     var hiltTestRule = HiltAndroidRule(this)

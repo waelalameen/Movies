@@ -11,10 +11,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import tech.wa.moviessample.data.Resource
+import tech.wa.moviessample.data.UiState
 import tech.wa.moviessample.data.remote.MoviesApi
 import tech.wa.moviessample.data.repository.details.DetailsRepositoryImpl
-import tech.wa.moviessample.presenation.MoviesViewModel
+import tech.wa.moviessample.presentation.MoviesViewModel
 import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -52,17 +52,17 @@ class MoviesViewModelTest {
         // Wait to obtain the result from StateFlow with some delay.
         viewModel.detailsState.test(timeoutMs = 2000) {
             // Assert that the first emission is loading,
-            assertEquals(Resource.State.LOADING, awaitItem().state)
+            assertEquals(UiState.State.LOADING, awaitItem().state)
 
             // Assert that the second emission is actual data.
             val item = awaitItem()
-            assertEquals(Resource.State.SUCCESS, item.state)
+            assertEquals(UiState.State.SUCCESS, item.state)
 
             // Make sure the emitted data is not null.
             assertTrue { item.data != null }
 
             // Assert that there's no more loading after fetching the data.
-            assertNotEquals(Resource.State.LOADING, item.state)
+            assertNotEquals(UiState.State.LOADING, item.state)
 
             // Cancel other flow events.
             cancelAndIgnoreRemainingEvents()
