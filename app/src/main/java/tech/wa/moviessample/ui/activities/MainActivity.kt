@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import dagger.hilt.android.AndroidEntryPoint
 import tech.wa.moviessample.R
 import tech.wa.moviessample.databinding.ActivityMainBinding
+import tech.wa.moviessample.extensions.setStatusBarColor
 import tech.wa.moviessample.extensions.setupWithNavController
 
 @AndroidEntryPoint
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStatusBarColor(R.color.white, lightText = true)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setupNavigationController()

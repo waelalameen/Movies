@@ -11,8 +11,8 @@ interface MoviesApi {
 
     @GET(BASE_URL)
     suspend fun search(
-        @Query("s") name: String,
-        @Query("page") page: Int
+        @Query("s") name: String = "",
+        @Query("page") page: Int = 1
     ): Response<ResultsResponse>
 
     @GET(BASE_URL)

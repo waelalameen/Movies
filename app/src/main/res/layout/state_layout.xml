@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="tech.wa.moviessample.data.UiState" />
@@ -28,6 +29,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_transparent">
+
+        <FrameLayout
+            android:id="@+id/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_transparent"
+            android:visibility="@{viewStatus.state == UiState.State.LOADING ? View.VISIBLE : View.GONE, default=visible}">
+
+            <ProgressBar
+                style="@style/LoadingProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foregroundGravity="center" />
+
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_error"
@@ -69,47 +86,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/color_transparent"
-            android:visibility="@{(viewStatus.state == UiState.State.IDLE) ? View.VISIBLE : View.GONE, default=gone}">
+            android:visibility="@{(viewStatus.state == UiState.State.IDLE) ? View.VISIBLE : View.GONE, default=gone}"
+            app:layout_constraintEnd_toStartOf="@+id/image_empty"
+            app:layout_constraintStart_toStartOf="@+id/image_empty">
 
             <ImageView
                 android:id="@+id/image_empty"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_close"
+                android:layout_height="280dp"
+                android:contentDescription="@string/empty_icon"
+                android:src="@drawable/ic_idle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/empty_icon" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/hint_text_view"
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
                 android:text="@{emptyMessage}"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_empty" />
+                app:layout_constraintTop_toBottomOf="@+id/image_empty"
+                tools:text="No Movies" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <FrameLayout
-            android:id="@+id/layout_loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_transparent"
-            android:visibility="@{viewStatus.state == UiState.State.LOADING ? View.VISIBLE : View.GONE, default=visible}">
-
-            <ProgressBar
-                style="@style/LoadingProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:foregroundGravity="center" />
-
-        </FrameLayout>
 
     </FrameLayout>
 </layout>

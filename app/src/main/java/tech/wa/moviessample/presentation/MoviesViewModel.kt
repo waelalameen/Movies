@@ -52,6 +52,15 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
+    private val queryState = MutableStateFlow("")
+
+    fun search(query: String) {
+        queryState.value = query
+        _retryEvent.value = RetryEvent.SearchEvent(query)
+        searchResultsStatus.value = UiState.Loading(isLoading = true)
+        registry.notifyChange(this, BR.searchResultsStatus)
+    }
+
     @get:Bindable
     val searchResultsStatus = MutableStateFlow<UiState<PagingData<Search>>>(UiState.Idle())
 
@@ -62,15 +71,12 @@ class MoviesViewModel @Inject constructor(
             SearchDataSource(api, queryState.value)
         }
     ).flow.filterNot { it == hidden }
-        .cachedIn(viewModelScope)
-
-    private val queryState = MutableStateFlow("s")
-
-    fun search(query: String) {
-        queryState.value = query
-        _retryEvent.value = RetryEvent.SearchEvent(query)
-        registry.notifyChange(this, BR.searchResultsStatus)
-    }
+        .cachedIn(viewModelScope).apply {
+            if (queryState.value.isNotBlank()) {
+                searchResultsStatus.value = UiState.Loading(isLoading = false)
+                registry.notifyChange(this@MoviesViewModel, BR.searchResultsStatus)
+            }
+        }
 
     private val _detailsState =
         MutableStateFlow<UiState<Details>>(UiState.Loading(isLoading = false))

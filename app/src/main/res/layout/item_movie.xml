@@ -38,29 +38,29 @@
                 android:id="@+id/poster_image"
                 android:layout_width="98dp"
                 android:layout_height="128dp"
+                android:contentDescription="@string/poster_image"
                 android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/avatars"
                 app:url="@{item.poster}"
-                android:contentDescription="@string/poster_image" />
+                tools:srcCompat="@tools:sample/avatars" />
 
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/favorites_title_text_view"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+            style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="3"
             android:text="@{item.title}"
             app:layout_constraintBottom_toTopOf="@+id/description_text_view"
             app:layout_constraintEnd_toStartOf="@+id/favorite_icon_image_view"
             app:layout_constraintStart_toEndOf="@+id/poster_card"
             app:layout_constraintTop_toTopOf="@+id/poster_card"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_chainStyle="spread_inside"
             tools:text="Avengers: Endgame" />
 
         <TextView
@@ -69,9 +69,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/action_adventure_drama"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/action_adventure_drama"
             app:layout_constraintBottom_toBottomOf="@id/chip_group"
             app:layout_constraintEnd_toEndOf="@+id/hide_icon_image_view"
             app:layout_constraintStart_toStartOf="@+id/favorites_title_text_view"
@@ -84,7 +84,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/poster_card"
             app:layout_constraintEnd_toEndOf="@+id/description_text_view"
-            app:layout_constraintStart_toStartOf="@+id/description_text_view">
+            app:layout_constraintStart_toStartOf="@+id/description_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/description_text_view">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/type_chip"
@@ -107,28 +108,28 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/favorite_toggle_icon"
+            android:contentDescription="@string/add_to_favorites"
             android:onClick="@{(v) -> itemInteractionListener.addToFavorite(item)}"
+            android:textOff=""
+            android:textOn=""
             app:layout_constraintBottom_toBottomOf="@+id/hide_icon_image_view"
             app:layout_constraintEnd_toStartOf="@+id/hide_icon_image_view"
             app:layout_constraintStart_toEndOf="@+id/favorites_title_text_view"
             app:layout_constraintTop_toTopOf="@+id/hide_icon_image_view"
-            android:textOn=""
-            android:textOff=""
-            android:background="@drawable/favorite_toggle_icon"
-            app:tint="@color/grey_100"
-            android:contentDescription="@string/add_to_favorites" />
+            app:tint="@color/grey_100" />
 
         <ImageView
             android:id="@+id/hide_icon_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:contentDescription="@string/hide_movie_or_show"
             android:onClick="@{(v) -> itemInteractionListener.hideFromFeed(item)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/favorite_icon_image_view"
             app:layout_constraintTop_toTopOf="@+id/favorites_title_text_view"
-            app:srcCompat="@drawable/ic_close"
-            android:contentDescription="@string/hide_movie_or_show" />
+            app:srcCompat="@drawable/ic_close" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

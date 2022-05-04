@@ -5,6 +5,7 @@
     <string name="emptyMessage">No movies or shows found</string>
     <string name="detailsEmptyMessage">No movie or show details found</string>
     <string name="searchHintMessage">Search for movies or shows</string>
+    <string name="favoritesHintMessage">No movies or shows added to favorites yet</string>
     <string name="detailsHintMessage">No details available for this movie or show</string>
     <string name="poster_image">poster image</string>
     <string name="add_to_favorites">add to favorites</string>

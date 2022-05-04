@@ -83,7 +83,7 @@
             layout="@layout/state_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:emptyMessage="@{@string/searchHintMessage}"
+            app:emptyMessage="@{@string/favoritesHintMessage}"
             app:isEmpty="@{viewModel.favoritesState.data.empty}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

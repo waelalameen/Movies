@@ -19,9 +19,8 @@ class SearchDataSource(
 
             val response = api.search(query, nextPageNumber)
             val body = response.body()
-
             body?.let {
-                if (it.responseStatus == "False") {
+                if (it.responseStatus == "False" && it.errorMessage != "Incorrect IMDb ID.") {
                     throw Exception(it.errorMessage)
                 }
             }
@@ -31,7 +30,7 @@ class SearchDataSource(
 
             LoadResult.Page(
                 data = searchResults,
-                prevKey = if (nextPageNumber > 0) nextPageNumber - 1 else null,
+                prevKey = null, // if (nextPageNumber > 0) nextPageNumber - 1 else
                 nextKey = if (nextPageNumber < totalPages) nextPageNumber + 1 else null
             )
         } catch (e: Exception) {

@@ -1,13 +1,17 @@
 package tech.wa.moviessample.extensions
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import android.content.ComponentName
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.StyleRes
+import androidx.core.content.getSystemService
 import androidx.core.util.Preconditions
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
@@ -23,6 +27,20 @@ fun View.visible(predicate: Boolean) {
 
 fun Fragment.pop() {
     Navigation.findNavController(view!!).popBackStack()
+}
+
+fun Activity.setStatusBarColor(colorResource: Int, lightText: Boolean) {
+    window.statusBarColor = getColor(colorResource)
+    if (lightText) window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    else window.decorView.systemUiVisibility =
+        window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+}
+
+fun Activity.hideKeyboard(view: View) {
+    try {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    } catch (ignore: Exception) { }
 }
 
 /**
