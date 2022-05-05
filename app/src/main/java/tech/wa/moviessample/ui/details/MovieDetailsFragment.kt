@@ -12,11 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import tech.wa.moviessample.R
 import tech.wa.moviessample.databinding.FragmentDetailsBinding
 import tech.wa.moviessample.extensions.pop
+import tech.wa.moviessample.extensions.visible
 import tech.wa.moviessample.presentation.MoviesViewModel
 
 @AndroidEntryPoint
@@ -39,6 +42,9 @@ class MovieDetailsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+        bottomNavigationView.visible(false)
 
         arguments.id?.let {
             viewModel.getDetails(it)

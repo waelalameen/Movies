@@ -1,35 +1,30 @@
 package tech.wa.moviessample.ui.home
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast.LENGTH_LONG
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainer
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import tech.wa.moviessample.R
 import tech.wa.moviessample.data.UiState
 import tech.wa.moviessample.databinding.FragmentMoviesBinding
 import tech.wa.moviessample.domain.Search
 import tech.wa.moviessample.extensions.hideKeyboard
+import tech.wa.moviessample.extensions.visible
 import tech.wa.moviessample.presentation.MoviesViewModel
 import tech.wa.moviessample.ui.utils.EspressoIdlingResource
 
@@ -59,6 +54,9 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
             it.setVariable(BR.viewModel, viewModel)
             it.executePendingBindings()
         }
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+        bottomNavigationView.visible(true)
 
         setupRecycler()
         addSearchInputListener()
@@ -91,6 +89,7 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
                 if (text.isNotBlank()) {
                     lifecycleScope.launch {
                         viewModel.search(query = text)
+                        setupList()
                         moviesAdapter.refresh()
                     }
                 }
@@ -102,16 +101,16 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
     private fun addClearInputListener() {
         binding.searchInputLayout.setEndIconOnClickListener {
             binding.searchInput.setText("")
+            requireActivity().hideKeyboard(binding.root)
+
             lifecycleScope.launch {
-                moviesAdapter.submitData(PagingData.empty())
                 moviesAdapter.refresh()
+                viewModel.cleanUp()
             }
         }
     }
 
     private fun setupList() {
-        //if (binding.searchInput.text.toString().trim().isBlank()) return
-
         lifecycleScope.launch {
             viewModel.searchResults.collectLatest { pagingData ->
                 moviesAdapter.submitData(pagingData)
@@ -119,15 +118,20 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
                     println("refresh => ${it.refresh}")
                     when (it.refresh) {
                         is LoadState.Loading -> {
-                            viewModel.searchResultsStatus.value = UiState.Loading()
+                            viewModel.searchResultsState.value = UiState.Loading()
                         }
                         is LoadState.NotLoading -> {
-                            viewModel.searchResultsStatus.value = UiState.Success(data = pagingData)
+                            if (viewModel.queryState.value.isBlank()) {
+                                viewModel.searchResultsState.value = UiState.Idle()
+                            } else {
+                                viewModel.searchResultsState.value = UiState.Success(data = pagingData)
+                            }
                         }
-                        is LoadState.Error -> viewModel.searchResultsStatus.value = UiState.Error(
-                            errorMessage = getString(R.string.emptyMessage)
+                        is LoadState.Error -> viewModel.searchResultsState.value = UiState.Error(
+                            errorMessage = getString(R.string.emptyMessage),
+                            errorIcon = R.drawable.illustration_error
                         )
-                        else -> viewModel.searchResultsStatus.value = UiState.Idle()
+                        else -> viewModel.searchResultsState.value = UiState.Idle()
                     }
                 }
                 EspressoIdlingResource.decrement()

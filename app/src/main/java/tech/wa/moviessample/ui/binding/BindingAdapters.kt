@@ -1,6 +1,7 @@
 package tech.wa.moviessample.ui.binding
 
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -20,10 +21,16 @@ fun provideImageUrlLoader(imageView: ImageView, url: String?) {
 
         Glide.with(imageView)
             .load(it)
-            .centerCrop()
+            .centerInside()
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .error(circularProgressDrawable)
             .placeholder(circularProgressDrawable)
             .into(imageView)
     }
+}
+
+@BindingAdapter("app:Illustration")
+fun provideIllustrationDrawableLoader(imageView: ImageView, drawableId: Int) {
+    val context = imageView.context
+    imageView.setImageDrawable(AppCompatResources.getDrawable(context, drawableId))
 }

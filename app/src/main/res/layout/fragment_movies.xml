@@ -109,7 +109,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
-                android:visibility="@{viewModel.searchResultsStatus.state == UiState.State.SUCCESS ? View.VISIBLE : View.GONE, default=gone}"
+                android:visibility="@{viewModel.searchResultsState.state == UiState.State.SUCCESS ? View.VISIBLE : View.GONE, default=gone}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +130,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/search_input_layout"
                 app:viewModel="@{viewModel}"
-                app:viewStatus="@{viewModel.searchResultsStatus}" />
+                app:viewStatus="@{viewModel.searchResultsState}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -52,31 +52,32 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    private val queryState = MutableStateFlow("")
+    @get:Bindable
+    val searchResultsState = MutableStateFlow<UiState<PagingData<Search>>>(UiState.Idle())
+
+    val queryState = MutableStateFlow("")
 
     fun search(query: String) {
         queryState.value = query
         _retryEvent.value = RetryEvent.SearchEvent(query)
-        searchResultsStatus.value = UiState.Loading(isLoading = true)
-        registry.notifyChange(this, BR.searchResultsStatus)
+        searchResultsState.value = UiState.Loading(isLoading = true)
+        registry.notifyChange(this, BR.searchResultsState)
     }
 
-    @get:Bindable
-    val searchResultsStatus = MutableStateFlow<UiState<PagingData<Search>>>(UiState.Idle())
+    fun cleanUp() {
+        queryState.value = ""
+        searchResultsState.value = UiState.Idle()
+        registry.notifyChange(this, BR.searchResultsState)
+    }
 
     val searchResults = Pager(
         config = PagingConfig(pageSize = DEFAULT_PAGE_SIZE),
         pagingSourceFactory = {
             loadHiddenMoviesOrShows()
-            SearchDataSource(api, queryState.value)
+            SearchDataSource(api, queryState.value, searchResultsState)
         }
     ).flow.filterNot { it == hidden }
-        .cachedIn(viewModelScope).apply {
-            if (queryState.value.isNotBlank()) {
-                searchResultsStatus.value = UiState.Loading(isLoading = false)
-                registry.notifyChange(this@MoviesViewModel, BR.searchResultsStatus)
-            }
-        }
+        .cachedIn(viewModelScope)
 
     private val _detailsState =
         MutableStateFlow<UiState<Details>>(UiState.Loading(isLoading = false))

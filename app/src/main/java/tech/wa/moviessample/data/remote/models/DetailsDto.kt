@@ -39,7 +39,7 @@ data class DetailsDto(
     @SerializedName("Type")
     val type: String,
     @SerializedName("BoxOffice")
-    val boxOfficeRevenue: String,
+    val boxOfficeRevenue: String?,
     @SerializedName("Response")
     val responseStatus: String,
     @SerializedName("Error")
@@ -64,7 +64,7 @@ data class DetailsDto(
             rating = rating,
             votes = votes,
             type = type,
-            boxOfficeRevenue = boxOfficeRevenue,
+            boxOfficeRevenue = boxOfficeRevenue ?: "",
         )
     }
 }
