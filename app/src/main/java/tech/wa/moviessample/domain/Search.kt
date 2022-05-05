@@ -5,7 +5,8 @@ data class Search(
     val year: String = "",
     val id: String = "",
     val type: String = "",
-    val poster: String = ""
+    val poster: String = "",
+    var isFavorite: Boolean = false
 ) {
     fun toFavorite(): Favorites {
         return Favorites(

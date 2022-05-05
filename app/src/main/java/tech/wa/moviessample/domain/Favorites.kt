@@ -18,4 +18,14 @@ data class Favorites(
             poster = poster
         )
     }
+
+    fun toSearch(): Search {
+        return Search(
+            title = title,
+            year = year,
+            id = id,
+            type = type,
+            poster = poster
+        )
+    }
 }

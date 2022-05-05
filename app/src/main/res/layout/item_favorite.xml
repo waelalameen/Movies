@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="tech.wa.moviessample.domain.Details" />
+        <import type="tech.wa.moviessample.domain.Favorites" />
         <import type="tech.wa.moviessample.ui.favorites.FavoriteItemInteractionListener" />
 
         <variable
             name="item"
-            type="Details" />
+            type="Favorites" />
 
         <variable
             name="itemInteractionListener"
@@ -18,7 +18,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{(v) -> itemInteractionListener.onItemClick(item)}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/poster_card_view"
@@ -42,8 +43,8 @@
                     android:id="@+id/poster_image_view"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/poster_image"
+                    app:url="@{item.poster}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +65,7 @@
                     app:srcCompat="@drawable/ic_favorite" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -83,14 +85,13 @@
 
         <TextView
             android:id="@+id/type_year_text_view"
-            style="@style/TextAppearance.MaterialComponents.Caption"
+            style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
-            android:text="@{item.type + ` &#x2022; ` + item.year}"
-            android:textStyle="bold"
+            android:text="@{item.type + ` - ` + item.year}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/favorites_title_text_view"
             app:layout_constraintHorizontal_bias="0.0"

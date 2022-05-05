@@ -22,6 +22,7 @@
     <string name="empty_icon">Empty Icon</string>
     <string name="action_adventure_drama">Action, Adventure, Drama</string>
     <string name="add_to_favorites_message">Added to favorites</string>
+    <string name="remove_from_favorites_message">Removed from favorites</string>
     <string name="hide_confirmation_message">Do you want to hide this from your future search?</string>
     <string name="confirm">Confirm</string>
 </resources>

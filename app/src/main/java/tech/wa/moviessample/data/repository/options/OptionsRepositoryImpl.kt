@@ -32,15 +32,14 @@ class OptionsRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     @WorkerThread
-    override suspend fun getFavorite(id: String): Flow<UiState<Favorites>> = flow<UiState<Favorites>> {
+    override suspend fun getFavorite(id: String): Flow<UiState<Favorites?>> = flow {
         emit(UiState.Loading(isLoading = true))
 
-        favoritesDao.getFavorite(id)?.toFavorite().also {
-            if (it != null) {
-                emit(UiState.Success(it))
-            } else {
-                emit(UiState.Idle())
-            }
+        val item = favoritesDao.getFavorite(id)
+        if (item != null) {
+            emit(UiState.Success(item.toFavorite()))
+        } else {
+            emit(UiState.Success(null))
         }
     }.flowOn(Dispatchers.IO)
 

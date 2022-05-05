@@ -11,4 +11,6 @@ object MoviesComparator : DiffUtil.ItemCallback<Search>() {
     override fun areContentsTheSame(oldItem: Search, newItem: Search): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Search, newItem: Search) = Any()
 }

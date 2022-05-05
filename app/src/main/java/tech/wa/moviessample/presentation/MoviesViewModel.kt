@@ -6,10 +6,7 @@ import androidx.databinding.PropertyChangeRegistry
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -40,6 +37,17 @@ class MoviesViewModel @Inject constructor(
 
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
         registry.remove(callback)
+    }
+
+    init {
+        loadHiddenMoviesOrShows()
+    }
+
+    private val _isBeingAddedToFavorites: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isBeingAddedToFavorites: StateFlow<Boolean> = _isBeingAddedToFavorites
+
+    fun setAsBeingAddedToFavorites(added: Boolean) {
+        _isBeingAddedToFavorites.value = added
     }
 
     private val hidden: MutableSharedFlow<List<Search>> = MutableSharedFlow()
@@ -73,10 +81,16 @@ class MoviesViewModel @Inject constructor(
     val searchResults = Pager(
         config = PagingConfig(pageSize = DEFAULT_PAGE_SIZE),
         pagingSourceFactory = {
-            loadHiddenMoviesOrShows()
             SearchDataSource(api, queryState.value, searchResultsState)
         }
     ).flow.filterNot { it == hidden }
+        .map { pagingData ->
+            pagingData.map {
+                val favoriteItem = optionsRepository.getFavorite(it.id).last().data
+                val item = favoriteItem?.toSearch()?.copy(isFavorite = true) ?: it
+                item
+            }
+        }
         .cachedIn(viewModelScope)
 
     private val _detailsState =

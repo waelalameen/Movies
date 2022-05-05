@@ -12,8 +12,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import tech.wa.moviessample.data.UiState
+import tech.wa.moviessample.data.cache.daos.FavoritesDao
+import tech.wa.moviessample.data.cache.daos.HiddenDao
 import tech.wa.moviessample.data.remote.MoviesApi
 import tech.wa.moviessample.data.repository.details.DetailsRepositoryImpl
+import tech.wa.moviessample.data.repository.options.OptionsRepositoryImpl
 import tech.wa.moviessample.presentation.MoviesViewModel
 import javax.inject.Inject
 import kotlin.test.assertEquals
@@ -34,6 +37,12 @@ class MoviesViewModelTest {
     @Inject
     lateinit var api: MoviesApi
 
+    @Inject
+    lateinit var favoritesDao: FavoritesDao
+
+    @Inject
+    lateinit var hiddenDao: HiddenDao
+
     private lateinit var viewModel: MoviesViewModel
 
     @Before
@@ -41,7 +50,9 @@ class MoviesViewModelTest {
         hiltTestRule.inject()
 
         val detailsRepository = DetailsRepositoryImpl(api)
-        viewModel = MoviesViewModel(api, detailsRepository)
+        val optionsRepository = OptionsRepositoryImpl(favoritesDao, hiddenDao)
+
+        viewModel = MoviesViewModel(api, detailsRepository, optionsRepository)
     }
 
     @Test

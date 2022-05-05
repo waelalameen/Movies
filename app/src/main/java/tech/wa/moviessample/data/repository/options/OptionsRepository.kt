@@ -10,7 +10,7 @@ interface OptionsRepository {
 
     suspend fun getAllFavorites(): Flow<UiState<List<Favorites>>>
 
-    suspend fun getFavorite(id: String): Flow<UiState<Favorites>>
+    suspend fun getFavorite(id: String): Flow<UiState<Favorites?>>
 
     suspend fun addToFavorites(favorite: Favorites)
 

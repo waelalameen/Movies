@@ -7,5 +7,18 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="tech.wa.moviessample.ui.favorites.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_movieDetailsFragment2"
+            app:destination="@id/movieDetailsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment2"
+        android:name="tech.wa.moviessample.ui.details.MovieDetailsFragment"
+        android:label="MovieDetailsFragment" >
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>
