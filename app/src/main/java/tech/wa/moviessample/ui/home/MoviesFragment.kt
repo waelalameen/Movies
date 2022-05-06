@@ -119,6 +119,7 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
                 moviesAdapter.loadStateFlow.collect {
                     println("refresh => ${it.refresh}")
                     collectState(it, pagingData)
+
                 }
 
                 EspressoIdlingResource.decrement()
@@ -185,7 +186,10 @@ class MoviesFragment: Fragment(), MoviesSearchItemInteractionListener<Search> {
         Snackbar.make(rootView.findViewById(R.id.coordinator_layout),
             getString(R.string.hide_confirmation_message), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.confirm)) {
-                //viewModel.hideMovie(item.toHidden())
+                val index = moviesAdapter.snapshot().indexOf(item)
+                item.isDeleted = true
+                moviesAdapter.notifyItemChanged(index, item)
+                viewModel.hideMovie(item.toHidden())
             }
             .show()
     }

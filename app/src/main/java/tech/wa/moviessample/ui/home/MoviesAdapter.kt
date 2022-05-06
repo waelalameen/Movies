@@ -1,6 +1,7 @@
 package tech.wa.moviessample.ui.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.library.baseAdapters.BR
 import androidx.paging.PagingDataAdapter
@@ -27,6 +28,15 @@ class MoviesAdapter(private val itemInteractionListener: ItemInteractionListener
     inner class MoviesViewHolder(private val binding: ItemMovieBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(searchItem: Search) {
+            if (searchItem.isDeleted) {
+                binding.root.visibility = View.GONE
+                binding.root.layoutParams = RecyclerView.LayoutParams(0, 0)
+            } else {
+                binding.root.visibility = View.VISIBLE
+                binding.root.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT)
+            }
+
             binding.setVariable(BR.item, searchItem)
             binding.setVariable(BR.itemInteractionListener, itemInteractionListener)
             binding.executePendingBindings()

@@ -36,7 +36,7 @@ class SearchDataSource(
 
             LoadResult.Page(
                 data = searchResults,
-                prevKey = null, // if (nextPageNumber > 0) nextPageNumber - 1 else null
+                prevKey = if (nextPageNumber > 0) nextPageNumber - 1 else null,
                 nextKey = if (nextPageNumber < totalPages) nextPageNumber + 1 else null
             )
         } catch (e: Exception) {

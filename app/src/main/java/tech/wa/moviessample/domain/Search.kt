@@ -6,7 +6,8 @@ data class Search(
     val id: String = "",
     val type: String = "",
     val poster: String = "",
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    var isDeleted: Boolean = false
 ) {
     fun toFavorite(): Favorites {
         return Favorites(

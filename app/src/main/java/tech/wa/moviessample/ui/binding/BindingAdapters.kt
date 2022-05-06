@@ -22,7 +22,7 @@ fun provideImageUrlLoader(imageView: ImageView, url: String?) {
         Glide.with(imageView)
             .load(it)
             .centerInside()
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .error(circularProgressDrawable)
             .placeholder(circularProgressDrawable)
             .into(imageView)

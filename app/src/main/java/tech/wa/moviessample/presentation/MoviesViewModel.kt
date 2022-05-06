@@ -43,19 +43,13 @@ class MoviesViewModel @Inject constructor(
         loadHiddenMoviesOrShows()
     }
 
-    private val _isBeingAddedToFavorites: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isBeingAddedToFavorites: StateFlow<Boolean> = _isBeingAddedToFavorites
-
-    fun setAsBeingAddedToFavorites(added: Boolean) {
-        _isBeingAddedToFavorites.value = added
-    }
-
-    private val hidden: MutableSharedFlow<List<Search>> = MutableSharedFlow()
+    private val hidden = arrayListOf<Search>()
 
     private fun loadHiddenMoviesOrShows() {
         viewModelScope.launch {
             optionsRepository.getHiddenMoviesOrShows().onEach {
-                hidden.emit(it)
+                hidden.addAll(it)
+                println("hidden => $it")
             }.launchIn(viewModelScope)
         }
     }
@@ -83,13 +77,16 @@ class MoviesViewModel @Inject constructor(
         pagingSourceFactory = {
             SearchDataSource(api, queryState.value, searchResultsState)
         }
-    ).flow.filterNot { it == hidden }
+    ).flow
         .map { pagingData ->
             pagingData.map {
                 val favoriteItem = optionsRepository.getFavorite(it.id).last().data
                 val item = favoriteItem?.toSearch()?.copy(isFavorite = true) ?: it
                 item
             }
+        }
+        .map { pagingData ->
+            pagingData.filter { it.id !in hidden.map { item -> item.id } }
         }
         .cachedIn(viewModelScope)
 
@@ -113,6 +110,7 @@ class MoviesViewModel @Inject constructor(
         viewModelScope.launch {
             optionsRepository.hideMovieOrShow(movie)
             _retryEvent.value = RetryEvent.HideMovie(movie)
+            loadHiddenMoviesOrShows()
         }
     }
 
